@@ -12,7 +12,12 @@ class CreateTransactionsTable extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->uuid('id')->primary();
+            $table->uuid('sender_id');
+            $table->uuid('receiver_id');
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('value');
             $table->datetimes();
         });
     }
