@@ -6,15 +6,10 @@ use Hyperf\Database\Seeders\Seeder;
 use App\Repository\UserRepository;
 use Hyperf\Stringable\Str;
 use App\Enum\UserTypesEnum;
-use App\Helpers\Factory\DocumentGenerator;
+use HyperfTest\Helpers\Factory\DocumentGenerator;
 
 class Users extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run(): void
     {
         UserRepository::create([

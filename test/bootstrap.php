@@ -5,7 +5,6 @@ declare(strict_types=1);
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Psr\Log\LogLevel;
-use Hyperf\Utils\ApplicationContext;
 
 ini_set('display_errors', 'on');
 ini_set('display_startup_errors', 'on');
@@ -45,3 +44,11 @@ $config->set(StdoutLoggerInterface::class, [
 ]);
 
 $container->get(Hyperf\Contract\ApplicationInterface::class);
+
+Hyperf\Coroutine\run(function () use ($container) {
+    $container = Hyperf\Context\ApplicationContext::getContainer();
+    $container->get('Hyperf\Database\Commands\Migrations\FreshCommand')->run(
+        new Symfony\Component\Console\Input\StringInput(''),
+        new Symfony\Component\Console\Output\ConsoleOutput()
+    );
+});

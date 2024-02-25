@@ -9,18 +9,18 @@ use Carbon\Carbon;
 /**
  * @property int $id
  * @property uuid user_id
- * @property int value
+ * @property int amount
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
 class Wallet extends AbstractModel
 {
     protected ?string $table = 'wallets';
-    protected array $fillable = ['id', 'user_id', 'value'];
+    protected array $fillable = ['id', 'user_id', 'amount'];
     protected array $casts = [
         'id' => 'string',
         'user_id' => 'string',
-        'value' => 'string',
+        'amount' => 'string',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];

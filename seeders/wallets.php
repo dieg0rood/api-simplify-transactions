@@ -15,12 +15,9 @@ class Wallets extends Seeder
      */
     public function run()
     {
-        $users = UserRepository::withoutWallet();
+        $users = UserRepository::findWithoutWallet();
         foreach ($users as $user) {
-            WalletRepository::create([
-                'user_id' => $user->id,
-                'value' => rand(100, 10000000)
-            ]);
+            WalletRepository::create($user, rand(100, 10000000));
         }
     }
 }

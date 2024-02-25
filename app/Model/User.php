@@ -19,7 +19,7 @@ use Carbon\Carbon;
 class User extends AbstractModel
 {
     protected ?string $table = 'users';
-    protected array $fillable = ['id', 'full_name', 'document', 'email', 'type'];
+    protected array $fillable = ['id', 'full_name', 'document', 'email', 'type', 'password'];
     protected array $casts = [
         'id' => 'string',
         'full_name' => 'string',
