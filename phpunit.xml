@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
-         backupStaticAttributes="false"
          bootstrap="./test/bootstrap.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
@@ -18,7 +14,11 @@
             <directory suffix=".php">./app</directory>
         </whitelist>
     </filter>
-    <php>
-        <env name="APP_ENV" value="testing" force="true"/>
-    </php>
+    <logging>
+        <log type="coverage-html" target="runtime/coverage"
+             charset="UTF-8" yui="true" highlight="true"
+             lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="/tmp/coverage.xml"/>
+        <log type="junit" target="/tmp/junit.xml"/>
+    </logging>
 </phpunit>
