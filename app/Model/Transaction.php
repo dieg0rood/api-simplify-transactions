@@ -16,7 +16,7 @@ use Carbon\Carbon;
  */
 class Transaction extends AbstractModel
 {
-    protected ?string $table = 'users';
+    protected ?string $table = 'transactions';
     protected array $fillable = ['id', 'sender_id', 'receiver_id', 'value'];
     protected array $casts = [
         'id' => 'string',

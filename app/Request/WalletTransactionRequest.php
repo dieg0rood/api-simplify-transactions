@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Request;
 
+use App\Interfaces\Request\TransactionRequestInterface;
 use App\Repository\UserRepository;
-use App\Repository\WalletRepository;
 use Hyperf\Validation\Request\FormRequest;
 
-class WalletTransactionRequest extends FormRequest
+class WalletTransactionRequest extends FormRequest implements TransactionRequestInterface
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,8 +31,7 @@ class WalletTransactionRequest extends FormRequest
             ],
             'payer' => [
                 'required',
-                'string',
-                'in:' . join(',', UserRepository::onlyPayers()->pluck('id'))
+                'string'
             ],
             'payee' => [
                 'required',
@@ -43,15 +42,15 @@ class WalletTransactionRequest extends FormRequest
 
     public function getTransactionValue(): int
     {
-        return $this->input('value');
+        return (int) ($this->input('value') * 100);
     }
 
-    public function getSenderId(): int
+    public function getSenderId(): string
     {
         return $this->input('payer');
     }
 
-    public function getReceiverId(): int
+    public function getReceiverId(): string
     {
         return $this->input('payee');
     }

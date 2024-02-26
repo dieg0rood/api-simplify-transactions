@@ -15,14 +15,40 @@ class WalletTransactionTest extends AbstractTest
 {
     public function testTransactionUserToUser()
     {
-        $payer = UserGenerator::init()->enterprise()->withWallet()->initialAmount(10000)->create();
+        $payer = UserGenerator::init()->withWallet()->initialAmount(10000)->create();
         $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
 
         $body = [
-            'value' => 5000,
-            'payer' => $payer->id,
-            'payee' => $payee->id,
+            'value' => 99.99,
+            'payer' => $payer['id'],
+            'payee' => $payee['id'],
         ];
         $response = $this->post('/wallet/transaction', $body);
     }
+
+//    public function testTransactionWithEnterpriseUserCannotBePayerException()
+//    {
+//        $payer = UserGenerator::init()->enterprise()->withWallet()->initialAmount(10000)->create();
+//        $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
+//
+//        $body = [
+//            'value' => 5000,
+//            'payer' => $payer['id'],
+//            'payee' => $payee['id'],
+//        ];
+//        $response = $this->post('/wallet/transaction', $body);
+//    }
+
+//    public function testTransactionWithInsufficientAmountException()
+//    {
+//        $payer = UserGenerator::init()->withWallet()->initialAmount(10000)->create();
+//        $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
+//
+//        $body = [
+//            'value' => 50000,
+//            'payer' => $payer['id'],
+//            'payee' => $payee['id'],
+//        ];
+//        $response = $this->post('/wallet/transaction', $body);
+//    }
 }

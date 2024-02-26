@@ -5,6 +5,7 @@ namespace HyperfTest\Helpers\Factory;
 use App\Enum\UserTypesEnum;
 use App\Model\User;
 use App\Repository\UserRepository;
+use App\Resource\UserResource;
 use Hyperf\Stringable\Str;
 
 class UserGenerator
@@ -13,7 +14,7 @@ class UserGenerator
     private int $initialAmount = 0;
     private bool $withWallet = false;
 
-    public function create(): User
+    public function create(): UserResource
     {
         if($this->withWallet) {
             return UserRepository::createWithWallet([

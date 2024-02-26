@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository\Interfaces\Wallet;
+namespace App\Interfaces\Repository;
 
 use App\Model\User;
 

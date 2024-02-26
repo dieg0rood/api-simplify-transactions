@@ -12,7 +12,7 @@ use Hyperf\Testing\TestCase;
  * @internal
  * @coversNothing
  */
-class AbstractTest extends TestCase
+abstract class AbstractTest extends TestCase
 {
     public function setUp(): void
     {
