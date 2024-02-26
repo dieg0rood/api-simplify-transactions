@@ -19,11 +19,11 @@ class WalletTransactionTest extends AbstractTest
         $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
 
         $body = [
-            'value' => 99.99,
+            'value' => 50.00,
             'payer' => $payer['id'],
             'payee' => $payee['id'],
         ];
-        $response = $this->post('/wallet/transaction', $body);
+        $response = $this->getData($this->post('/wallet/transaction', $body));
     }
 
 //    public function testTransactionWithEnterpriseUserCannotBePayerException()

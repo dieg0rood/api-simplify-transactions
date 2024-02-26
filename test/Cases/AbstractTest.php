@@ -14,6 +14,9 @@ use Hyperf\Testing\TestCase;
  */
 abstract class AbstractTest extends TestCase
 {
+    public function getData($response) {
+        return json_decode($response->getBody()->getContents());
+    }
     public function setUp(): void
     {
         Schema::disableForeignKeyConstraints();

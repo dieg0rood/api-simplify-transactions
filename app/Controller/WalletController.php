@@ -13,7 +13,6 @@ class WalletController extends Controller
 {
     public function transaction (WalletTransactionRequest $request): ResponseInterface
     {
-        $transaction = TransactionService::instanciate()->makeTransaction($request);
-        return (new Response())->json($transaction);
+        return TransactionService::instanciate()->makeTransaction($request)->toResponse();
     }
 }
