@@ -30,7 +30,8 @@ class WalletRepository implements WalletRepositoryInterface
     {
         $wallet = Wallet::find($wallet['id']);
         $newAmount = (int)$wallet->amount - $amount;
-        $wallet->update(['value' => $newAmount]);
+        $wallet->update(['amount' => $newAmount]);
+
         return WalletResource::make($wallet);
     }
 
@@ -38,7 +39,7 @@ class WalletRepository implements WalletRepositoryInterface
     {
         $wallet = Wallet::find($wallet['id']);
         $newAmount = (int)$wallet->amount + $amount;
-        $wallet->update(['value' => $newAmount]);
+        $wallet->update(['amount' => $newAmount]);
         return WalletResource::make($wallet);
     }
 }

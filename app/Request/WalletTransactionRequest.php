@@ -27,7 +27,7 @@ class WalletTransactionRequest extends FormRequest implements TransactionRequest
             'value' => [
                 'required',
                 'numeric',
-                'min:100'
+                'min:1'
             ],
             'payer' => [
                 'required',

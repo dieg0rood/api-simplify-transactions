@@ -10,6 +10,6 @@ class EnterpriseUserCannotBePayerException extends ApplicationException
 {
     public function __construct()
     {
-        parent::__construct(ApplicationErrorCodesEnum::EnterpriseUserCannotBePayer, Status::UNAUTHORIZED);
+        parent::__construct(ApplicationErrorCodesEnum::EnterpriseUserCannotBePayer, Status::UNPROCESSABLE_ENTITY);
     }
 }

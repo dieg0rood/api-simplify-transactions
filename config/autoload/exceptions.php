@@ -12,7 +12,8 @@ declare(strict_types=1);
 return [
     'handler' => [
         'http' => [
-            Hyperf\HttpServer\Exception\Handler\HttpExceptionHandler::class,
+            App\Exception\Handler\ApplicationValidationExceptionHandler::class,
+            App\Exception\Handler\ApplicationExceptionHandler::class,
             App\Exception\Handler\AppExceptionHandler::class,
         ],
     ],

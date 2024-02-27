@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace HyperfTest\Cases\Wallet;
 
+use App\Enum\ApplicationErrorCodesEnum;
 use HyperfTest\Cases\AbstractTest;
 use HyperfTest\Helpers\Factory\UserGenerator;
+use HyperfTest\Traits\AssertsTrait;
+use Swoole\Http\Status;
 
 /**
  * @internal
@@ -13,42 +16,62 @@ use HyperfTest\Helpers\Factory\UserGenerator;
  */
 class WalletTransactionTest extends AbstractTest
 {
+    use AssertsTrait;
     public function testTransactionUserToUser()
     {
-        $payer = UserGenerator::init()->withWallet()->initialAmount(10000)->create();
-        $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
+        $payerBeforeAmount = 100.00;
+        $payeeBeforeAmount = 0.0;
+        $transactionAmount = 50.00;
+
+        $payer = UserGenerator::init()->withWallet()->initialAmount($payerBeforeAmount)->create()->toArray();
+        $payee = UserGenerator::init()->withWallet()->initialAmount($payeeBeforeAmount)->create()->toArray();
 
         $body = [
-            'value' => 50.00,
+            'value' => $transactionAmount,
             'payer' => $payer['id'],
             'payee' => $payee['id'],
         ];
         $response = $this->getData($this->post('/wallet/transaction', $body));
+
+        $this->validateTransaction($response['data'], $body);
+        $this->validateWallet($response['data'], $payerBeforeAmount, $payeeBeforeAmount, $transactionAmount);
     }
 
-//    public function testTransactionWithEnterpriseUserCannotBePayerException()
-//    {
-//        $payer = UserGenerator::init()->enterprise()->withWallet()->initialAmount(10000)->create();
-//        $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
-//
-//        $body = [
-//            'value' => 5000,
-//            'payer' => $payer['id'],
-//            'payee' => $payee['id'],
-//        ];
-//        $response = $this->post('/wallet/transaction', $body);
-//    }
+    public function testTransactionWithEnterpriseUserCannotBePayerException()
+    {
+        $payerBeforeAmount = 100.00;
+        $payeeBeforeAmount = 0.0;
+        $transactionAmount = 50.00;
 
-//    public function testTransactionWithInsufficientAmountException()
-//    {
-//        $payer = UserGenerator::init()->withWallet()->initialAmount(10000)->create();
-//        $payee = UserGenerator::init()->withWallet()->initialAmount(0)->create();
-//
-//        $body = [
-//            'value' => 50000,
-//            'payer' => $payer['id'],
-//            'payee' => $payee['id'],
-//        ];
-//        $response = $this->post('/wallet/transaction', $body);
-//    }
+        $payer = UserGenerator::init()->withWallet()->enterprise()->initialAmount($payerBeforeAmount)->create()->toArray();
+        $payee = UserGenerator::init()->withWallet()->initialAmount($payeeBeforeAmount)->create()->toArray();
+
+        $body = [
+            'value' => $transactionAmount,
+            'payer' => $payer['id'],
+            'payee' => $payee['id'],
+        ];
+        $response = $this->getData($this->post('/wallet/transaction', $body));
+
+        $this->expectExceptionTest($response,ApplicationErrorCodesEnum::EnterpriseUserCannotBePayer, Status::UNPROCESSABLE_ENTITY);
+    }
+
+    public function testTransactionWithInsufficientAmountException()
+    {
+        $payerBeforeAmount = 100.00;
+        $payeeBeforeAmount = 0.0;
+        $transactionAmount = 200.00;
+
+        $payer = UserGenerator::init()->withWallet()->initialAmount($payerBeforeAmount)->create()->toArray();
+        $payee = UserGenerator::init()->withWallet()->initialAmount($payeeBeforeAmount)->create()->toArray();
+
+        $body = [
+            'value' => $transactionAmount,
+            'payer' => $payer['id'],
+            'payee' => $payee['id'],
+        ];
+        $response = $this->getData($this->post('/wallet/transaction', $body));
+
+        $this->expectExceptionTest($response,ApplicationErrorCodesEnum::InsufficientWalletAmount, Status::UNPROCESSABLE_ENTITY);
+    }
 }

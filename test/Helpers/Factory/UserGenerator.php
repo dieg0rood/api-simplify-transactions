@@ -39,9 +39,9 @@ class UserGenerator
         $this->withWallet = true;
         return $this;
     }
-    public function initialAmount(int $amount): UserGenerator
+    public function initialAmount(float $amount): UserGenerator
     {
-        $this->initialAmount = $amount;
+        $this->initialAmount = (int)$amount * 100;
         return $this;
     }
 
