@@ -62,8 +62,23 @@
               }
             }
           },
+          "401": {
+            "description": "Erros de autorização",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/TransactionUnauthorizedException"
+                    }
+                  ]
+                }
+              }
+            }
+          },
           "422": {
-            "description": "Erros relacionados ao request",
+            "description": "Erros de request",
             "content": {
               "application/json": {
                 "schema": {
@@ -84,7 +99,7 @@
             }
           },
           "500": {
-            "description": "Erros no servidor próprio e/ou em servidor de terceiros",
+            "description": "Erros internos",
             "content": {
               "application/json": {
                 "schema": {
@@ -229,6 +244,23 @@
               "message": {
                 "type": "string",
                 "example": "transaction_to_yourself_exception"
+              }
+            }
+          }
+        ]
+      },
+      "TransactionUnauthorizedException": {
+        "type": "object",
+        "allOf": [
+          {
+            "properties": {
+              "code": {
+                "type": "integer",
+                "example": "401"
+              },
+              "message": {
+                "type": "string",
+                "example": "transaction_unauthorized_exception"
               }
             }
           }

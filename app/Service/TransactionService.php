@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Enum\UserTypesEnum;
 use App\Exception\ApplicationException;
 use App\Exception\Auth\AuthRequestException;
+use App\Exception\Auth\TransactionUnauthorizedException;
 use App\Exception\Notification\NotificationRequestException;
 use App\Exception\Transaction\TransactionToYourselfException;
 use App\Exception\User\EnterpriseUserCannotBePayerException;
@@ -73,7 +74,7 @@ class TransactionService
             DB::commit();
             $this->notificationService->notify();
             return $transaction;
-        } catch (AuthRequestException $e) {
+        } catch (AuthRequestException|TransactionUnauthorizedException $e) {
             DB::rollback();
             throw $e;
         } catch (NotificationRequestException $e) {

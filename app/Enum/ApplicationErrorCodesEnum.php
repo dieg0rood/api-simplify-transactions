@@ -10,4 +10,5 @@ enum ApplicationErrorCodesEnum: string
     case EnterpriseUserCannotBePayer = 'enterprise_user_cannot_be_payer';
     case NotificationRequestException = 'notification_request_exception';
     case TransactionToYourselfException = 'transaction_to_yourself_exception';
+    case TransactionUnauthorizedException = 'transaction_unauthorized_exception';
 }
