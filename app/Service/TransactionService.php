@@ -4,25 +4,31 @@ namespace App\Service;
 
 use App\Enum\UserTypesEnum;
 use App\Exception\ApplicationException;
+use App\Exception\Auth\AuthRequestException;
+use App\Exception\Notification\NotificationRequestException;
+use App\Exception\Transaction\TransactionToYourselfException;
 use App\Exception\User\EnterpriseUserCannotBePayerException;
 use App\Exception\Wallet\InsufficientWalletAmountException;
-use App\ExternalServices\Service\TransactionAuthService;
+use App\ExternalServices\Service\Notification\NotificationService;
+use App\ExternalServices\Service\TransactionAuth\TransactionAuthService;
+use App\Helpers\Logger;
 use App\Interfaces\Request\TransactionRequestInterface;
 use App\Repository\TransactionsRepository;
 use App\Repository\UserRepository;
 use App\Repository\WalletRepository;
 use App\Resource\TransactionResource;
 use Hyperf\DbConnection\Db;
-use App\Helpers\Logger;
 
 class TransactionService
 {
     private UserRepository $senderRepository;
     private UserRepository $receiverRepository;
     private TransactionAuthService $transactionAuthService;
+    private NotificationService $notificationService;
     public function __construct()
     {
         $this->transactionAuthService = TransactionAuthService::instanciate();
+        $this->notificationService = NotificationService::instanciate();
     }
 
     public static function instanciate(): TransactionService
@@ -54,6 +60,10 @@ class TransactionService
         $receiver = $this->receiverRepository->user();
         $receiverWallet = $this->receiverRepository->wallet();
 
+        if ($receiver['id'] === $sender['id']) {
+            throw new TransactionToYourselfException();
+        }
+
         Db::beginTransaction();
         try {
             $this->transactionAuthService->auth();
@@ -61,12 +71,15 @@ class TransactionService
             WalletRepository::deposit($receiverWallet, $request->getTransactionValue());
             $transaction = TransactionsRepository::create($sender, $receiver, $request->getTransactionValue());
             DB::commit();
+            $this->notificationService->notify();
             return $transaction;
-        } catch (ApplicationException $e) {
+        } catch (AuthRequestException $e) {
             DB::rollback();
             throw $e;
+        } catch (NotificationRequestException $e) {
+            Logger::instanciate()->error($e->getMessage());
+            // TODO: Insert job on queue
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
             DB::rollback();
             Logger::instanciate()->error($e->getMessage());
             throw new ApplicationException();

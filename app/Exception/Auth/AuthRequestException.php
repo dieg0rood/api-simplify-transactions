@@ -10,6 +10,6 @@ class AuthRequestException extends ApplicationException
 {
     public function __construct()
     {
-        parent::__construct(ApplicationErrorCodesEnum::TransactionAuthRequestException, Status::UNAUTHORIZED);
+        parent::__construct(ApplicationErrorCodesEnum::TransactionAuthRequestException);
     }
 }

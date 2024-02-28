@@ -1,8 +1,8 @@
 <?php
 
-namespace App\ExternalServices\Service;
+namespace App\ExternalServices\Service\TransactionAuth;
 
-use App\ExternalServices\Request\TransactionAuthRequest;
+use App\ExternalServices\Request\TransactionAuth\TransactionAuthRequest;
 
 class TransactionAuthService
 {

@@ -37,6 +37,24 @@ class WalletTransactionTest extends AbstractTest
         $this->validateWallet($response['data'], $payerBeforeAmount, $payeeBeforeAmount, $transactionAmount);
     }
 
+    public function testTransactionToYourself()
+    {
+        $payerBeforeAmount = 100.00;
+        $transactionAmount = 50.00;
+
+        $payer = UserGenerator::init()->withWallet()->initialAmount($payerBeforeAmount)->create()->toArray();
+        $payee = $payer;
+
+        $body = [
+            'value' => $transactionAmount,
+            'payer' => $payer['id'],
+            'payee' => $payee['id'],
+        ];
+        $response = $this->getData($this->post('/wallet/transaction', $body));
+
+        $this->expectExceptionTest($response,ApplicationErrorCodesEnum::TransactionToYourselfException, Status::UNPROCESSABLE_ENTITY);
+    }
+
     public function testTransactionWithEnterpriseUserCannotBePayerException()
     {
         $payerBeforeAmount = 100.00;
