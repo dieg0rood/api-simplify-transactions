@@ -78,8 +78,9 @@ class TransactionService
             DB::rollback();
             throw $e;
         } catch (NotificationRequestException $e) {
+            // Insert job on queue
             Logger::instanciate()->error($e->getMessage());
-            // TODO: Insert job on queue
+            return $transaction;
         } catch (\Exception $e) {
             DB::rollback();
             Logger::instanciate()->error($e->getMessage());

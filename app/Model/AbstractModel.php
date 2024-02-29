@@ -9,7 +9,7 @@ use Hyperf\Stringable\Str;
 abstract class AbstractModel extends Model
 {
     public bool $incrementing = false;
-    public function creating(Creating $event)
+    public function creating()
     {
         if (!$this->id) {
             $this->id = Str::uuid();

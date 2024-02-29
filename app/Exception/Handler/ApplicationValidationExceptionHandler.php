@@ -3,7 +3,7 @@
 namespace App\Exception\Handler;
 
 use Hyperf\HttpMessage\Stream\SwooleStream;
-use Hyperf\Utils\Str;
+use \Hyperf\Stringable\Str;
 use Hyperf\Validation\ValidationException;
 use Hyperf\Validation\ValidationExceptionHandler;
 use Psr\Http\Message\ResponseInterface;
