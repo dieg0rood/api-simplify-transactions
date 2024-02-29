@@ -1,63 +1,77 @@
-# Introduction
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+# Simplify Transaction API
 
-# Requirements
+A API simplify-transaction faz de maneira simplificada uma transação entre duas pessoas, atualizando devidamente suas carteiras, enviando notificações e também é realizada uma validação externa para a autorização da transação (Mock).
 
-Hyperf has some requirements for the system environment, it can only run under Linux and Mac environment, but due to the development of Docker virtualization technology, Docker for Windows can also be used as the running environment under Windows.
 
-The various versions of Dockerfile have been prepared for you in the [hyperf/hyperf-docker](https://github.com/hyperf/hyperf-docker) project, or directly based on the already built [hyperf/hyperf](https://hub.docker.com/r/hyperf/hyperf) Image to run.
 
-When you don't want to use Docker as the basis for your running environment, you need to make sure that your operating environment meets the following requirements:  
+## Instalação/Configuração
 
- - PHP >= 8.1
- - Any of the following network engines
-   - Swoole PHP extension >= 5.0，with `swoole.use_shortname` set to `Off` in your `php.ini`
-   - Swow PHP extension >= 1.3
- - JSON PHP extension
- - Pcntl PHP extension
- - OpenSSL PHP extension （If you need to use the HTTPS）
- - PDO PHP extension （If you need to use the MySQL Client）
- - Redis PHP extension （If you need to use the Redis Client）
- - Protobuf PHP extension （If you need to use the gRPC Server or Client）
-
-# Installation using Composer
-
-The easiest way to create a new Hyperf project is to use [Composer](https://getcomposer.org/). If you don't have it already installed, then please install as per [the documentation](https://getcomposer.org/download/).
-
-To create your new Hyperf project:
+Faça o clone o projeto em seu computador
 
 ```bash
-composer create-project hyperf/hyperf-skeleton path/to/install
+  git clone git@github.com:dieg0rood/api-simplify-transactions.git
 ```
 
-If your development environment is based on Docker you can use the official Composer image to create a new Hyperf project:
+Na pasta do projeto faça o build do container
 
 ```bash
-docker run --rm -it -v $(pwd):/app composer create-project --ignore-platform-reqs hyperf/hyperf-skeleton path/to/install
+  docker-compose build --no-cache
 ```
 
-# Getting started
-
-Once installed, you can run the server immediately using the command below.
+Verifique se o container está rodando
 
 ```bash
-cd path/to/install
-php bin/hyperf.php start
+  docker ps
 ```
 
-Or if in a Docker based environment you can use the `docker-compose.yml` provided by the template:
+Caso não esteja dê o start
 
 ```bash
-cd path/to/install
-docker-compose up
+  docker-composer up -d
 ```
 
-This will start the cli-server on port `9501`, and bind it to all network interfaces. You can then visit the site at `http://localhost:9501/` which will bring up Hyperf default home page.
+Acesse o bash do container, instale as dependencias do projeto
 
-## Hints
+```bash
+  composer install
+```
 
-- A nice tip is to rename `hyperf-skeleton` of files like `composer.json` and `docker-compose.yml` to your actual project name.
-- Take a look at `config/routes.php` and `app/Controller/IndexController.php` to see an example of a HTTP entrypoint.
+Renomeie o .env.example para .env e o projeto já estará totalmente configurado
+    
+## Stack utilizada
 
-**Remember:** you can always replace the contents of this README.md file to something that fits your project description.
+**Back-end:** Php 8.2 - Framework HyperF
+
+Implementações e Justificativas:
+
+- **Repository**: Menor acoplamento ao ORM utilizado 
+- **Resource**: Redução de acomplamento e padronização de retorno de dados de serviços.
+- **Testes Unitários**: Testes realizados pelo plugin disponibilizado no skeleton do projeto hyperf.
+- **Exceptions**: Foram criadas exceptions e handlers personalizados em todo o projeto, dessa forma com o auxilio da documentação(swagger) e os códigos de erros mapeados + http codes, qualquer consumidor da API será capaz de identificar a origem do erro, além de permitir que os testes façam a validação especifica de cada exception disparada.
+- **ExternalServices**: Pasta criada na raiz do app para armazenar de maneira separada requisições a serviços de terceiros, mantendo o diretório App\Services dedicado à serviços internos da API.
+- **Validação Request**: Utilizado a validação do framework, similar a validação feita via FormRequest do Laravel.
+
+
+## Rodando os testes
+
+Para rodar os testes, rode o seguinte comando dentro do container
+
+```bash
+  composer test
+```
+
+
+## Roadmap
+
+- Implementar Mocks nos testes, Adicionar testes nos serviços terceiros, caso de falha.
+
+- Aumentar a utilização de Injeção de dependencias para reduzir a chamada de funções estáticas
+
+- Padronizar a aplicação para trabalhar com valores em float (o objetivo inicial era trabalhar com valores como int, exemplo $10,00 = 1000). Reverter essa lógica.
+
+
+## Documentação
+
+[Documentação] Disponível em docs\openai.json
+
